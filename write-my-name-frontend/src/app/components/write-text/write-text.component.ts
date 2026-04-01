@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Frame, ProgramPresenter, ProgramPresenterAPI, RobotSettings } from '@universal-robots/contribution-api';
-import { WriteTextNode, WriteTextParameters, WriteTextSourceMode } from './write-text.node';
+import { WriteTextNode, WriteTextSourceMode } from './write-text.node';
 import { firstValueFrom } from 'rxjs';
 import { first } from 'rxjs/operators';
 
@@ -13,16 +13,18 @@ import { first } from 'rxjs/operators';
 })
 
 export class WriteTextComponent implements OnChanges, ProgramPresenter {
-    // presenterAPI is optional
     @Input() presenterAPI: ProgramPresenterAPI;
-
-    // robotSettings is optional
     @Input() robotSettings: RobotSettings;
-    // contributedNode is optional
     @Input() contributedNode: WriteTextNode;
 
     readonly fixedMode: WriteTextSourceMode = 'fixed';
     readonly variableMode: WriteTextSourceMode = 'variable';
+
+    textSourceMode: WriteTextSourceMode = 'fixed';
+    fixedText: string = '';
+    selectedVariable: string = '';
+    selectedFrame: string = '';
+
     variableOptions: string[] = [];
     frameOptions: string[] = [];
     protected readonly translateService = inject(TranslateService);
@@ -49,8 +51,11 @@ export class WriteTextComponent implements OnChanges, ProgramPresenter {
                 });
         }
 
-        if (changes?.contributedNode?.currentValue) {
-            this.ensureDefaultParameters();
+        if (changes?.presenterAPI && this.presenterAPI) {
+            this.textSourceMode = this.contributedNode.parameters.textSourceMode;
+            this.fixedText = this.contributedNode.parameters.fixedText;
+            this.selectedVariable = this.contributedNode.parameters.selectedVariable || '';
+            this.selectedFrame = this.contributedNode.parameters.selectedFrame || '';
         }
 
         if ((changes?.presenterAPI || changes?.contributedNode) && this.presenterAPI) {
@@ -59,63 +64,45 @@ export class WriteTextComponent implements OnChanges, ProgramPresenter {
     }
 
     setSourceMode(mode: WriteTextSourceMode): void {
-        if (this.contributedNode.parameters.textSourceMode === mode) {
+        if (this.textSourceMode === mode) {
             return;
         }
 
+        this.textSourceMode = mode;
         this.contributedNode.parameters.textSourceMode = mode;
         this.saveNode();
     }
 
     setFixedText(value: string): void {
-        if (this.contributedNode.parameters.fixedText === value) {
+        if (this.fixedText === value) {
             return;
         }
 
+        this.fixedText = value;
         this.contributedNode.parameters.fixedText = value;
         this.saveNode();
     }
 
     setSelectedVariable(selected: string | { value?: string }): void {
         const variableName = this.getDropdownValue(selected);
-        if (this.contributedNode.parameters.selectedVariable === variableName) {
+        if (this.selectedVariable === variableName) {
             return;
         }
 
+        this.selectedVariable = variableName;
         this.contributedNode.parameters.selectedVariable = variableName;
         this.saveNode();
     }
 
     setSelectedFrame(selected: string | { value?: string }): void {
         const frameName = this.getDropdownValue(selected);
-        if (this.contributedNode.parameters.selectedFrame === frameName) {
+        if (this.selectedFrame === frameName) {
             return;
         }
 
+        this.selectedFrame = frameName;
         this.contributedNode.parameters.selectedFrame = frameName;
         this.saveNode();
-    }
-
-    get selectedVariableOption(): string | undefined {
-        return this.contributedNode?.parameters?.selectedVariable || undefined;
-    }
-
-    get selectedFrameOption(): string | undefined {
-        return this.contributedNode?.parameters?.selectedFrame || undefined;
-    }
-
-    private ensureDefaultParameters(): void {
-        const defaults: WriteTextParameters = {
-            textSourceMode: this.fixedMode,
-            fixedText: '',
-            selectedVariable: '',
-            selectedFrame: '',
-        };
-
-        this.contributedNode.parameters = {
-            ...defaults,
-            ...(this.contributedNode.parameters ?? {}),
-        };
     }
 
     private async loadDropdownOptions(): Promise<void> {
@@ -136,7 +123,6 @@ export class WriteTextComponent implements OnChanges, ProgramPresenter {
         return selected?.value ?? '';
     }
 
-    // call saveNode to save node parameters
     async saveNode(): Promise<void> {
         this.cd.detectChanges();
         await this.presenterAPI.programNodeService.updateNode(this.contributedNode);
