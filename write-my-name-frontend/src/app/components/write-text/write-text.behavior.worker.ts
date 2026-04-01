@@ -12,17 +12,23 @@ import {
 } from '@universal-robots/contribution-api';
 import { WriteTextNode } from './write-text.node';
 
-// programNodeLabel is required
 const createProgramNodeLabel = (node: WriteTextNode): AdvancedTranslatedProgramLabel => {
+    const isFixed = node.parameters.textSourceMode === 'fixed';
+    const textSource = isFixed
+        ? (node.parameters.fixedText || 'No text entered')
+        : (node.parameters.selectedVariable || 'No variable selected');
+    const frame = node.parameters.selectedFrame || 'No frame selected';
+
     return [
         {
             type: 'primary',
             translationKey: 'program-node-labels.write-text.nodeTitle',
+            interpolateParams: { textSource },
         },
         {
             type: 'secondary',
             translationKey: 'program-node-labels.write-text.subTitle',
-            interpolateParams: { dynamicValue: 'some dynamic value' },
+            interpolateParams: { frame },
         },
     ];
 };
@@ -50,10 +56,14 @@ const generateScriptCodeAfter = (node: WriteTextNode): OptionalPromise<ScriptBui
 // generateCodePreamble is optional
 const generatePreambleScriptCode = (node: WriteTextNode): OptionalPromise<ScriptBuilder> => new ScriptBuilder();
 
-// validator is optional
-const validate = (node: WriteTextNode, validationContext: ValidationContext): OptionalPromise<ValidationResponse> => ({
-    isValid: true
-});
+const validate = (node: WriteTextNode, validationContext: ValidationContext): OptionalPromise<ValidationResponse> => {
+    const hasFrame = !!node.parameters.selectedFrame;
+    const hasTextSource = node.parameters.textSourceMode === 'fixed'
+        ? !!node.parameters.fixedText
+        : !!node.parameters.selectedVariable;
+
+    return { isValid: hasTextSource && hasFrame };
+};
 
 // allowsChild is optional
 const allowChildInsert = (node: ProgramNode, childType: string): OptionalPromise<boolean> => true;

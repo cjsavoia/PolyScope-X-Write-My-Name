@@ -9,7 +9,7 @@ V1 ships a single contribution — the **Program Node** — with two input modes
 
 | Mode | Description |
 |------|-------------|
-| **Literal** | Operator types text directly in the node UI |
+| **Fixed** | Operator types text directly in the node UI |
 | **Variable** | Operator selects an existing PolyScope variable |
 
 Application Node, Operator Screen, and Rendering API integration are deferred to post-V1.
@@ -44,9 +44,10 @@ npm run install-urcap -- --host <robot_ip_address>
 
 1. Open a UR program in PolyScope X.
 2. Insert the **Write Text** node from the toolbox.
-3. Choose **Literal** or **Variable** source mode.
-4. Enter text (literal) or select a variable.
-5. Run the program — the node generates the corresponding URScript output.
+3. Choose **Fixed** or **Variable** source mode.
+4. Enter text (fixed) or select a variable.
+5. Select a frame.
+6. Run the program — the node generates the corresponding URScript output.
 
 ## Verification
 
@@ -54,4 +55,4 @@ npm run install-urcap -- --host <robot_ip_address>
 - `npm run build` succeeds
 - Root `npm run build` produces an installable `.urcapx`
 - Node appears in the simulator toolbox and inserts correctly
-- Both literal and variable modes generate valid script
+- Both fixed and variable modes generate valid script

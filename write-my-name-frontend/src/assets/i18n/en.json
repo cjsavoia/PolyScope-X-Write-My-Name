@@ -8,8 +8,8 @@
   },
   "program-node-labels": {
     "write-text": {
-      "nodeTitle": "Node Title",
-      "subTitle": "Sub Title - {{ dynamicValue }}"
+      "nodeTitle": "{{ textSource }}",
+      "subTitle": "Frame: {{ frame }}"
     }
   },
   "presenter": {
@@ -18,7 +18,7 @@
         "fixed": "Fixed",
         "variable": "Variable"
       },
-      "fixed_text": "Text",
+      "fixed_text": "Text to write",
       "variable": "Variable",
       "select_variable": "- Select variable -",
       "frame": "Frame",
