@@ -1,15 +1,28 @@
 {
-        "program": {
-          "tree": {
-            "nodes": {
-              "chsa-ur-write-my-name-write-text": "Write Text"
-          }
-        }
+  "program": {
+    "tree": {
+      "nodes": {
+        "chsa-ur-write-my-name-write-text": "Write Text"
+      }
+    }
+  },
+  "program-node-labels": {
+    "write-text": {
+      "nodeTitle": "Node Title",
+      "subTitle": "Sub Title - {{ dynamicValue }}"
+    }
+  },
+  "presenter": {
+    "write-text": {
+      "source": {
+        "fixed": "Fixed",
+        "variable": "Variable"
       },
-        "program-node-labels": {
-            "write-text": {
-                "nodeTitle": "Node Title",
-                "subTitle": "Sub Title - {{ dynamicValue }}"
-            }
-        }
+      "fixed_text": "Text",
+      "variable": "Variable",
+      "select_variable": "- Select variable -",
+      "frame": "Frame",
+      "select_frame": "- Select frame -"
+    }
+  }
 }

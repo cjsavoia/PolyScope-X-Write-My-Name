@@ -34,6 +34,10 @@ const createProgramNode = (): OptionalPromise<WriteTextNode> => ({
     lockChildren: false,
     allowsChildren: false,
     parameters: {
+        textSourceMode: 'fixed',
+        fixedText: '',
+        selectedVariable: '',
+        selectedFrame: '',
     },
 });
 

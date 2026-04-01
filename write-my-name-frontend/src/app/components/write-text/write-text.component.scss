@@ -1,8 +1,8 @@
 @import '../../../styles.scss';
 
-.inline-component {
+.write-text-controls {
   display: flex;
   align-items: center;
-  height: 40px;
+  flex-wrap: wrap;
   gap: var(--spacing-03);
 }

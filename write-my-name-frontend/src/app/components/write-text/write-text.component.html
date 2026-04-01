@@ -1,2 +1,51 @@
-<div *ngIf="contributedNode" class="inline-component">
+@if (contributedNode) {
+<div class="write-text-controls">
+    <ur-radio-group
+        [value]="contributedNode.parameters.textSourceMode"
+        [buttonPosition]="'inline'"
+        (radioChange)="setSourceMode($event.value)"
+    >
+        <ur-radio-button [value]="fixedMode">
+            {{ 'presenter.write-text.source.fixed' | translate }}
+        </ur-radio-button>
+        <ur-radio-button [value]="variableMode">
+            {{ 'presenter.write-text.source.variable' | translate }}
+        </ur-radio-button>
+    </ur-radio-group>
+
+    @if (contributedNode.parameters.textSourceMode === fixedMode) {
+    <ur-dialog-input
+        [label]="'presenter.write-text.fixed_text' | translate"
+        type="text"
+        [value]="contributedNode.parameters.fixedText"
+        (valueChanged)="setFixedText($event)"
+        [validation]="{ maxLength: 1000 }"
+        data-testid="write-text-fixed-input"
+    >
+    </ur-dialog-input>
+    }
+
+    @if (contributedNode.parameters.textSourceMode === variableMode) {
+    <ur-dropdown
+        [label]="'presenter.write-text.variable' | translate"
+        [options]="variableOptions"
+        [selectedOption]="selectedVariableOption"
+        [placeholder]="'presenter.write-text.select_variable' | translate"
+        [required]="true"
+        (selectionChange)="setSelectedVariable($event)"
+        data-testid="write-text-variable-dropdown"
+    ></ur-dropdown>
+    }
+
+    <ur-dropdown
+        [label]="'presenter.write-text.frame' | translate"
+        [options]="frameOptions"
+        [selectedOption]="selectedFrameOption"
+        [placeholder]="'presenter.write-text.select_frame' | translate"
+        [required]="true"
+        [clearable]="false"
+        (selectionChange)="setSelectedFrame($event)"
+        data-testid="write-text-frame-dropdown"
+    ></ur-dropdown>
 </div>
+}
