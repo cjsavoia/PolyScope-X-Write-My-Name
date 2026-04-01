@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Frame, ProgramPresenter, ProgramPresenterAPI, RobotSettings } from '@universal-robots/contribution-api';
+import { Frame, ProgramPresenter, ProgramPresenterAPI, RobotSettings, VariableValueType } from '@universal-robots/contribution-api';
 import { WriteTextNode, WriteTextSourceMode } from './write-text.node';
 import { firstValueFrom } from 'rxjs';
 import { first } from 'rxjs/operators';
@@ -111,7 +111,9 @@ export class WriteTextComponent implements OnChanges, ProgramPresenter {
             firstValueFrom(this.presenterAPI.framesService.observeFrames()),
         ]);
 
-        this.variableOptions = variables.map((variable) => variable.name);
+        this.variableOptions = variables
+            .filter((variable) => variable.valueType === VariableValueType.STRING)
+            .map((variable) => variable.name);
         this.frameOptions = frames.map((frame: Frame) => frame.name);
         this.cd.detectChanges();
     }
