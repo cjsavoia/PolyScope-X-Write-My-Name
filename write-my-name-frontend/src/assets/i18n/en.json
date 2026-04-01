@@ -1,0 +1,15 @@
+{
+        "program": {
+          "tree": {
+            "nodes": {
+              "chsa-ur-write-my-name-write-text": "Write Text"
+          }
+        }
+      },
+        "program-node-labels": {
+            "write-text": {
+                "nodeTitle": "Node Title",
+                "subTitle": "Sub Title - {{ dynamicValue }}"
+            }
+        }
+}

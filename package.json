@@ -1,0 +1,33 @@
+{
+  "name": "write-my-name",
+  "version": "0.0.0",
+  "scripts": {
+  "start": "npm run start --prefix write-my-name-frontend",
+  "install-frontend": "npm install --prefix write-my-name-frontend",
+  "lint": "npm run lint --prefix write-my-name-frontend",
+  "build-frontend": "npm run build --prefix write-my-name-frontend",
+  "copy-frontend": "ncp 'write-my-name-frontend/dist' 'dist'",
+  "write-sbom": "npm run write-sbom-frontend",
+  "write-sbom-frontend": "write-ur-packages ./write-my-name-frontend/package-lock.json dist",
+  "prebuild": "npm run clean-dist && npm run clean-target && npm run validate-manifest",
+  "build-arm": "export ARCH=linux/arm64 && npm run build",
+  "postinstall": "npm run install-frontend",
+  "build": "npm run build-frontend",
+  "prepackage": "mkdir dist && npm run copy-frontend && npm run copy-manifest && npm run copy-license && npm run write-sbom",
+  "postbuild": "npm run package",
+  "package": "package-urcap dist target",
+  "copy-manifest": "ncp 'manifest.yaml' 'dist/manifest.yaml'",
+  "copy-license": "ncp 'LICENSE' 'dist/LICENSE'",
+  "clean-dist": "rimraf dist",
+  "clean-target": "rimraf target",
+  "install-urcap": "install-urcap 'target/write-my-name*.urcapx' '../manifest-spec-19.10.31.json'",
+  "delete-urcap": "delete-urcap chsa-ur write-my-name",
+  "validate-manifest": "validate-manifest 'manifest.yaml' '../manifest-spec-19.10.31.json'"
+},
+  "private": true,
+  "devDependencies": {
+  "@universal-robots/urcap-utils": "2.1.2",
+  "ncp": "2.0.0",
+  "rimraf": "5.0.7"
+  }
+}

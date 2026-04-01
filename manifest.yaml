@@ -1,0 +1,11 @@
+metadata:
+  vendorID: "chsa-ur"
+  urcapID: "write-my-name"
+  vendorName: "chsa-ur"
+  urcapName: "Write My Name"
+  version: 1.0.0
+artifacts:
+  webArchives:
+  - id: "write-my-name-frontend"
+    folder: "write-my-name-frontend"
+  

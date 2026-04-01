@@ -1,0 +1,25 @@
+# Compiled output
+**/dist/
+**/target/
+**/tmp/
+**/out-tsc/
+**/bazel-out/
+
+# Dependencies
+**/node_modules/
+
+# Angular cache
+**/.angular/
+
+# Python
+**/venv/
+**/__pycache__/
+*.pyc
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db

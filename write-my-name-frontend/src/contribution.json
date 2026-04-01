@@ -1,0 +1,15 @@
+{
+  "applicationNodes": [],
+  "programNodes": [ 
+    {
+      "excludeFromToolbox": false,
+      "translationPath": "assets/i18n/",
+      "iconURI": "assets/icons/write-my-name.svg",
+      "behaviorURI": "write-text.worker.js",
+      "presenterURI": "main.js",
+      "componentTagName": "chsa-ur-write-my-name-write-text"
+    }],
+  "smartSkills": [],
+  "sidebarItems": [],
+  "operatorScreens": []
+}
