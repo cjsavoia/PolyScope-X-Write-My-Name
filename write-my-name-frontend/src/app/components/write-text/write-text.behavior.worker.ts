@@ -12,6 +12,44 @@ import {
 } from '@universal-robots/contribution-api';
 import { WriteTextNode } from './write-text.node';
 
+const DEFAULTS = {
+    speed: 0.2,
+    acceleration: 0.2,
+    penUp: 0.01,
+    penDown: -0.005,
+    spaceBetweenLetters: 0.005,
+    spaceWidth: 0.025,
+    xOffset: 0.01,
+    yOffset: 0.02,
+};
+
+const inRange = (value: number, min: number, max: number): boolean =>
+    Number.isFinite(value) && value >= min && value <= max;
+
+const withFallback = (value: number | undefined, fallback: number): number =>
+    Number.isFinite(value) ? (value as number) : fallback;
+
+const hasValidAdvancedParameters = (node: WriteTextNode): boolean => {
+    const speed = withFallback(node.parameters.speed, DEFAULTS.speed);
+    const acceleration = withFallback(node.parameters.acceleration, DEFAULTS.acceleration);
+    const penUp = withFallback(node.parameters.penUp, DEFAULTS.penUp);
+    const penDown = withFallback(node.parameters.penDown, DEFAULTS.penDown);
+    const spaceBetweenLetters = withFallback(node.parameters.spaceBetweenLetters, DEFAULTS.spaceBetweenLetters);
+    const spaceWidth = withFallback(node.parameters.spaceWidth, DEFAULTS.spaceWidth);
+    const xOffset = withFallback(node.parameters.xOffset, DEFAULTS.xOffset);
+    const yOffset = withFallback(node.parameters.yOffset, DEFAULTS.yOffset);
+
+    return inRange(speed, 0.001, 2)
+        && inRange(acceleration, 0.001, 10)
+        && inRange(penUp, 0.001, 0.1)
+        && inRange(penDown, -0.05, 0.05)
+        && penUp > penDown
+        && inRange(spaceBetweenLetters, 0, 0.1)
+        && inRange(spaceWidth, 0.001, 0.2)
+        && inRange(xOffset, -1, 1)
+        && inRange(yOffset, -1, 1);
+};
+
 const createProgramNodeLabel = (node: WriteTextNode): AdvancedTranslatedProgramLabel => {
     const isFixed = node.parameters.textSourceMode === 'fixed';
     const textSource = isFixed
@@ -69,8 +107,9 @@ const validate = (node: WriteTextNode, validationContext: ValidationContext): Op
     const hasTextSource = node.parameters.textSourceMode === 'fixed'
         ? !!node.parameters.fixedText
         : !!node.parameters.selectedVariable;
+    const hasValidAdvancedSettings = hasValidAdvancedParameters(node);
 
-    return { isValid: hasTextSource && hasFrame };
+    return { isValid: hasTextSource && hasFrame && hasValidAdvancedSettings };
 };
 
 // allowsChild is optional

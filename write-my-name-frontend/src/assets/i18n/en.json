@@ -46,7 +46,10 @@
         "space_between_letters": "Letter spacing",
         "space_width": "Space width",
         "x_offset": "X offset",
-        "y_offset": "Y offset"
+        "y_offset": "Y offset",
+        "validation": {
+          "between": "The value must be between {{ min }} and {{ max }} {{ unit }}."
+        }
       }
     }
   }

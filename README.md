@@ -1,58 +1,101 @@
-# Write My Name
+# Write My Name URCap
 
-A PolyScope X URCap that adds a **Write Text** program node to the UR robot toolbox.  
-The robot uses this node to write operator-supplied text in physical space.
+`Write My Name` is a PolyScope X URCap that contributes one program node, **Write Text**.
+The node lets an operator configure text input and writing parameters in the program tree.
 
-## V1 Scope
+## Current Status
 
-V1 ships a single contribution — the **Program Node** — with two input modes:
+The project currently includes:
 
-| Mode | Description |
-|------|-------------|
-| **Fixed** | Operator types text directly in the node UI |
-| **Variable** | Operator selects an existing PolyScope variable |
+- A single **Program Node** contribution (`Write Text`)
+- Text source modes:
+  - **Fixed**: text entered directly in the node
+  - **Variable**: selected PolyScope string variable
+- Required **Frame** selection
+- Advanced settings dialog for:
+  - speed and acceleration
+  - pen up/down heights
+  - letter and space spacing
+  - X/Y offsets
+- Program-tree labels that show the selected text source and frame
+- Node validation for required inputs and advanced parameter ranges
 
-Application Node, Operator Screen, and Rendering API integration are deferred to post-V1.
+## Known Limitation
 
-## Quick Start
+URScript generation is **not implemented yet** in the behavior worker.  
+The script hooks (`generateCodePreamble`, `generateCodeBeforeChildren`, `generateCodeAfterChildren`) currently return empty `ScriptBuilder` instances, so the node does not yet write motion script to the robot.
 
-### Install dependencies
+## Project Layout
 
-```shell
+```text
+manifest.yaml
+write-my-name-frontend/
+  src/app/components/write-text/
+    write-text.component.ts
+    write-text.component.html
+    write-text.behavior.worker.ts
+    write-text.node.ts
+```
+
+## Prerequisites
+
+- Node.js and npm
+- PolyScope X SDK tooling available in your environment (`package-urcap`, `install-urcap`, `validate-manifest`, etc.)
+- Access to URSim or a robot for deployment
+
+## Build and Package
+
+Install dependencies:
+
+```bash
 npm install
 ```
 
-### Build
+Build frontend and package URCap (`.urcapx` in `target/`):
 
-```shell
+```bash
 npm run build
 ```
 
-### Install to URSim
+Optional checks:
 
-```shell
+```bash
+npm run lint
+npm run validate-manifest
+```
+
+## Deploy
+
+Install to URSim:
+
+```bash
 npm run install-urcap
 ```
 
-### Install to robot
+Install to a robot:
 
-```shell
+```bash
 npm run install-urcap -- --host <robot_ip_address>
 ```
 
-## Usage
+Remove from simulator:
 
-1. Open a UR program in PolyScope X.
-2. Insert the **Write Text** node from the toolbox.
-3. Choose **Fixed** or **Variable** source mode.
-4. Enter text (fixed) or select a variable.
-5. Select a frame.
-6. Run the program — the node generates the corresponding URScript output.
+```bash
+npm run delete-urcap
+```
 
-## Verification
+## Run Frontend Dev Server
 
-- `npm run lint` passes cleanly
-- `npm run build` succeeds
-- Root `npm run build` produces an installable `.urcapx`
-- Node appears in the simulator toolbox and inserts correctly
-- Both fixed and variable modes generate valid script
+```bash
+npm run start
+```
+
+## Usage in PolyScope X
+
+1. Insert **Write Text** from the toolbox.
+2. Choose **Fixed** or **Variable** source mode.
+3. Enter text or select a string variable.
+4. Select a frame.
+5. Optionally tune advanced settings from the `...` button.
+
+The node state and validation are active, but motion script output is pending future implementation.

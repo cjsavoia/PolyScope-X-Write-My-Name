@@ -49,6 +49,24 @@
                         [value]="speed.toString()"
                         [unit]="'m/s'"
                         [validation]="{ min: 0.001, max: 2 }"
+                        [translations]="{
+                            rangeUnderflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: 0.001,
+                                          max: 2,
+                                          unit: 'm/s',
+                                      },
+                            rangeOverflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: 0.001,
+                                          max: 2,
+                                          unit: 'm/s',
+                                      },
+                        }"
                         (valueChanged)="setSpeed($event)"
                         data-testid="settings-speed"
                     ></ur-dialog-input>
@@ -58,6 +76,24 @@
                         [value]="acceleration.toString()"
                         [unit]="'m/s^2'"
                         [validation]="{ min: 0.001, max: 10 }"
+                        [translations]="{
+                            rangeUnderflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: 0.001,
+                                          max: 10,
+                                          unit: 'm/s^2',
+                                      },
+                            rangeOverflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: 0.001,
+                                          max: 10,
+                                          unit: 'm/s^2',
+                                      },
+                        }"
                         (valueChanged)="setAcceleration($event)"
                         data-testid="settings-acceleration"
                     ></ur-dialog-input>
@@ -76,6 +112,24 @@
                         [value]="penUp.toString()"
                         [unit]="'m'"
                         [validation]="{ min: 0.001, max: 0.1 }"
+                        [translations]="{
+                            rangeUnderflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: 0.001,
+                                          max: 0.1,
+                                          unit: 'm',
+                                      },
+                            rangeOverflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: 0.001,
+                                          max: 0.1,
+                                          unit: 'm',
+                                      },
+                        }"
                         (valueChanged)="setPenUp($event)"
                         data-testid="settings-pen-up"
                     ></ur-dialog-input>
@@ -85,6 +139,24 @@
                         [value]="penDown.toString()"
                         [unit]="'m'"
                         [validation]="{ min: -0.05, max: 0.05 }"
+                        [translations]="{
+                            rangeUnderflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: -0.05,
+                                          max: 0.05,
+                                          unit: 'm',
+                                      },
+                            rangeOverflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: -0.05,
+                                          max: 0.05,
+                                          unit: 'm',
+                                      },
+                        }"
                         (valueChanged)="setPenDown($event)"
                         data-testid="settings-pen-down"
                     ></ur-dialog-input>
@@ -103,6 +175,24 @@
                         [value]="spaceBetweenLetters.toString()"
                         [unit]="'m'"
                         [validation]="{ min: 0, max: 0.1 }"
+                        [translations]="{
+                            rangeUnderflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: 0,
+                                          max: 0.1,
+                                          unit: 'm',
+                                      },
+                            rangeOverflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: 0,
+                                          max: 0.1,
+                                          unit: 'm',
+                                      },
+                        }"
                         (valueChanged)="setSpaceBetweenLetters($event)"
                         data-testid="settings-space-between-letters"
                     ></ur-dialog-input>
@@ -112,6 +202,24 @@
                         [value]="spaceWidth.toString()"
                         [unit]="'m'"
                         [validation]="{ min: 0.001, max: 0.2 }"
+                        [translations]="{
+                            rangeUnderflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: 0.001,
+                                          max: 0.2,
+                                          unit: 'm',
+                                      },
+                            rangeOverflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: 0.001,
+                                          max: 0.2,
+                                          unit: 'm',
+                                      },
+                        }"
                         (valueChanged)="setSpaceWidth($event)"
                         data-testid="settings-space-width"
                     ></ur-dialog-input>
@@ -130,6 +238,24 @@
                         [value]="xOffset.toString()"
                         [unit]="'m'"
                         [validation]="{ min: -1, max: 1 }"
+                        [translations]="{
+                            rangeUnderflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: -1,
+                                          max: 1,
+                                          unit: 'm',
+                                      },
+                            rangeOverflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: -1,
+                                          max: 1,
+                                          unit: 'm',
+                                      },
+                        }"
                         (valueChanged)="setXOffset($event)"
                         data-testid="settings-x-offset"
                     ></ur-dialog-input>
@@ -139,6 +265,24 @@
                         [value]="yOffset.toString()"
                         [unit]="'m'"
                         [validation]="{ min: -1, max: 1 }"
+                        [translations]="{
+                            rangeUnderflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: -1,
+                                          max: 1,
+                                          unit: 'm',
+                                      },
+                            rangeOverflowMessage:
+                                'presenter.write-text.settings.validation.between'
+                                | translate
+                                    : {
+                                          min: -1,
+                                          max: 1,
+                                          unit: 'm',
+                                      },
+                        }"
                         (valueChanged)="setYOffset($event)"
                         data-testid="settings-y-offset"
                     ></ur-dialog-input>

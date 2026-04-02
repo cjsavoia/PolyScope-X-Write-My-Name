@@ -26,6 +26,7 @@ export class WriteTextComponent implements OnChanges, ProgramPresenter {
     fixedText: string = '';
     selectedVariable: string = '';
     selectedFrame: string = '';
+    advancedSettingsIsValid = true;
 
     variableOptions: string[] = [];
     frameOptions: string[] = [];
@@ -58,9 +59,11 @@ export class WriteTextComponent implements OnChanges, ProgramPresenter {
             this.fixedText = this.contributedNode.parameters.fixedText;
             this.selectedVariable = this.contributedNode.parameters.selectedVariable || '';
             this.selectedFrame = this.contributedNode.parameters.selectedFrame || '';
+            this.advancedSettingsIsValid = this.hasValidAdvancedSettings();
         }
 
         if ((changes?.presenterAPI || changes?.contributedNode) && this.presenterAPI) {
+            this.advancedSettingsIsValid = this.hasValidAdvancedSettings();
             await this.loadDropdownOptions();
         }
     }
@@ -139,7 +142,38 @@ export class WriteTextComponent implements OnChanges, ProgramPresenter {
         this.contributedNode.parameters.spaceWidth = result.spaceWidth;
         this.contributedNode.parameters.xOffset = result.xOffset;
         this.contributedNode.parameters.yOffset = result.yOffset;
+        this.advancedSettingsIsValid = this.hasValidAdvancedSettings();
         await this.saveNode();
+    }
+
+    private hasValidAdvancedSettings(): boolean {
+        const params = this.contributedNode.parameters;
+        const speed = this.withFallback(params.speed, 0.2);
+        const acceleration = this.withFallback(params.acceleration, 0.2);
+        const penUp = this.withFallback(params.penUp, 0.01);
+        const penDown = this.withFallback(params.penDown, -0.005);
+        const spaceBetweenLetters = this.withFallback(params.spaceBetweenLetters, 0.005);
+        const spaceWidth = this.withFallback(params.spaceWidth, 0.025);
+        const xOffset = this.withFallback(params.xOffset, 0.01);
+        const yOffset = this.withFallback(params.yOffset, 0.02);
+
+        return this.inRange(speed, 0.001, 2)
+            && this.inRange(acceleration, 0.001, 10)
+            && this.inRange(penUp, 0.001, 0.1)
+            && this.inRange(penDown, -0.05, 0.05)
+            && penUp > penDown
+            && this.inRange(spaceBetweenLetters, 0, 0.1)
+            && this.inRange(spaceWidth, 0.001, 0.2)
+            && this.inRange(xOffset, -1, 1)
+            && this.inRange(yOffset, -1, 1);
+    }
+
+    private inRange(value: number, min: number, max: number): boolean {
+        return Number.isFinite(value) && value >= min && value <= max;
+    }
+
+    private withFallback(value: number | undefined, fallback: number): number {
+        return Number.isFinite(value) ? (value as number) : fallback;
     }
 
     private async loadDropdownOptions(): Promise<void> {

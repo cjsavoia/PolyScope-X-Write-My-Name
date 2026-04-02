@@ -50,6 +50,7 @@
 
     <ur-icon-button
         (handleClick)="openAdvancedSettingsDialog()"
+        [type]="advancedSettingsIsValid ? 'default' : 'invalid'"
         data-testid="write-text-more-settings-button"
         size="small"
         icon="dots-three-more"
