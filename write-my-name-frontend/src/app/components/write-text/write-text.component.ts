@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Frame, ProgramPresenter, ProgramPresenterAPI, RobotSettings, VariableValueType } from '@universal-robots/contribution-api';
+import { CloseReason } from '@universal-robots/ui-models';
 import { WriteTextNode, WriteTextSourceMode } from './write-text.node';
+import { WriteTextSettingsDialogModel } from './write-text-settings-dialog/write-text-settings-dialog.model';
 import { firstValueFrom } from 'rxjs';
 import { first } from 'rxjs/operators';
 
@@ -103,6 +105,30 @@ export class WriteTextComponent implements OnChanges, ProgramPresenter {
         this.selectedFrame = frameName;
         this.contributedNode.parameters.selectedFrame = frameName;
         this.saveNode();
+    }
+
+    async openAdvancedSettingsDialog(): Promise<void> {
+        if (!this.presenterAPI) {
+            return;
+        }
+
+        const dialogData = await this.presenterAPI.dialogService.openCustomDialog<WriteTextSettingsDialogModel>(
+            'chsa-ur-write-my-name-write-text-settings-dialog',
+            {
+                ...this.contributedNode.parameters,
+            },
+            {
+                icon: 'pencil',
+                title: 'Write Text settings',
+                dialogSize: 'DEFAULT',
+                confirmText: 'Save',
+                raiseForKeyboard: false,
+            },
+        );
+
+        if (dialogData.reason !== CloseReason.CONFIRMED) {
+            return;
+        }
     }
 
     private async loadDropdownOptions(): Promise<void> {

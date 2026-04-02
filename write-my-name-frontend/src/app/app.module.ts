@@ -1,5 +1,6 @@
 import { DoBootstrap, Injector, NgModule } from '@angular/core';
 import { WriteTextComponent } from './components/write-text/write-text.component';
+import { WriteTextSettingsDialogComponent } from './components/write-text/write-text-settings-dialog/write-text-settings-dialog.component';
 
 import { UIAngularComponentsModule } from '@universal-robots/ui-angular-components';
 import { BrowserModule } from '@angular/platform-browser';
@@ -19,7 +20,8 @@ export const httpLoaderFactory = (http: HttpBackend) =>
 @NgModule({
 
   declarations: [
-      WriteTextComponent
+      WriteTextComponent,
+      WriteTextSettingsDialogComponent
 ],
     imports: [
       BrowserModule,
@@ -41,6 +43,8 @@ export class AppModule implements DoBootstrap {
   ngDoBootstrap() {
     const writetextComponent = createCustomElement(WriteTextComponent, {injector: this.injector});
     customElements.define('chsa-ur-write-my-name-write-text', writetextComponent);
+    const writeTextSettingsDialogComponent = createCustomElement(WriteTextSettingsDialogComponent, { injector: this.injector });
+    customElements.define('chsa-ur-write-my-name-write-text-settings-dialog', writeTextSettingsDialogComponent);
   }
 
   // This function is never called, because we don't want to actually use the workers, just tell webpack about them
