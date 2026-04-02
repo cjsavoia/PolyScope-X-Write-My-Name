@@ -19,11 +19,14 @@ The project currently includes:
   - X/Y offsets
 - Program-tree labels that show the selected text source and frame
 - Node validation for required inputs and advanced parameter ranges
+- URScript generation for writing letters with `servoj` waypoints extracted from the URAcademy reference script
+- Generated letter library in `write-my-name-frontend/src/app/components/write-text/write-text-letters.ts`
+- Namespaced runtime variables (for example `wmn_plane`) to avoid collisions with other program script
 
-## Known Limitation
+## Runtime Verification Status
 
-URScript generation is **not implemented yet** in the behavior worker.  
-The script hooks (`generateCodePreamble`, `generateCodeBeforeChildren`, `generateCodeAfterChildren`) currently return empty `ScriptBuilder` instances, so the node does not yet write motion script to the robot.
+- Confirmed in simulator: node generates script and executes writing flow.
+- Remaining validation: physical robot test (timing, feature behavior, and path fidelity under real hardware constraints).
 
 ## Project Layout
 
@@ -35,6 +38,7 @@ write-my-name-frontend/
     write-text.component.html
     write-text.behavior.worker.ts
     write-text.node.ts
+    write-text-letters.ts
 ```
 
 ## Prerequisites
@@ -97,5 +101,3 @@ npm run start
 3. Enter text or select a string variable.
 4. Select a frame.
 5. Optionally tune advanced settings from the `...` button.
-
-The node state and validation are active, but motion script output is pending future implementation.
