@@ -1,9 +1,12 @@
 metadata:
   vendorID: "chsa-ur"
   urcapID: "write-my-name"
-  vendorName: "chsa-ur"
+  version: 1.1.0
+  vendorName: "Christopher Savoia / Universal Robots"
   urcapName: "Write My Name"
-  version: 1.0.0
+  description: "Program node that draws text with a marker using robot movements"
+  contactInfo: "https://github.com/cjsavoia/PolyScope-X-Write-My-Name/"
+  licenseType: "MIT"
 artifacts:
   webArchives:
   - id: "write-my-name-frontend"
