@@ -129,30 +129,35 @@ const createLetterFunctionScript = (letter: LetterDef): string => {
     return lines.join('\n');
 };
 
-const createDispatcherScript = (): string => {
+const createDispatcherScript = (allowedChars?: ReadonlySet<string>): string => {
     const letterToChars = new Map<string, string[]>();
 
     for (const [char, fnName] of Object.entries(CHAR_TO_LETTER)) {
+        if (allowedChars && !allowedChars.has(char)) {
+            continue;
+        }
         if (!letterToChars.has(fnName)) {
             letterToChars.set(fnName, []);
         }
         letterToChars.get(fnName)?.push(char);
     }
 
-    const functionEntries = Object.keys(LETTER_LIBRARY).map((fnName) => ({
-        fnName,
-        chars: letterToChars.get(fnName) || [],
-    }));
+    const functionEntries = Object.keys(LETTER_LIBRARY)
+        .filter((fnName) => (letterToChars.get(fnName)?.length ?? 0) > 0)
+        .map((fnName) => ({
+            fnName,
+            chars: letterToChars.get(fnName) as string[],
+        }));
 
     const lines: string[] = [];
     lines.push('# Start of writeMyCharacter');
     lines.push('###');
     lines.push('# Dispatches one character to the matching letter function');
-    lines.push('# @param Buchstabe string character to write');
+    lines.push('# @param character string character to write');
     lines.push('###');
-    lines.push('def writeMyCharacter(Buchstabe):');
+    lines.push('def writeMyCharacter(character):');
     functionEntries.forEach((entry, index) => {
-        const conditions = entry.chars.map((char) => `Buchstabe=="${char}"`).join(' or ');
+        const conditions = entry.chars.map((char) => `character=="${char}"`).join(' or ');
         const branch = index === 0 ? 'if' : 'elif';
         lines.push(`  ${branch}(${conditions}):`);
         lines.push(`    ${entry.fnName}()`);
@@ -166,9 +171,30 @@ const createDispatcherScript = (): string => {
     return lines.join('\n');
 };
 
-const createPreambleScript = (): string => {
-    const letterDefinitions = Object.values(LETTER_LIBRARY).map(createLetterFunctionScript);
-    return `${createDispatcherScript()}\n\n${letterDefinitions.join('\n\n')}\n`;
+const getRequiredLettersForNode = (node: WriteTextNode): LetterDef[] => {
+    if (node.parameters.textSourceMode !== 'fixed') {
+        return Object.values(LETTER_LIBRARY);
+    }
+
+    const fixedText = node.parameters.fixedText || '';
+    const usedFunctionNames = new Set<string>();
+    for (const char of fixedText) {
+        const functionName = CHAR_TO_LETTER[char];
+        if (functionName) {
+            usedFunctionNames.add(functionName);
+        }
+    }
+
+    return Object.values(LETTER_LIBRARY).filter((letter) => usedFunctionNames.has(letter.functionName));
+};
+
+const createPreambleScript = (node: WriteTextNode): string => {
+    const requiredLetters = getRequiredLettersForNode(node);
+    const allowedChars = node.parameters.textSourceMode === 'fixed'
+        ? new Set((node.parameters.fixedText || '').split(''))
+        : undefined;
+    const letterDefinitions = requiredLetters.map(createLetterFunctionScript);
+    return `${createDispatcherScript(allowedChars)}\n\n${letterDefinitions.join('\n\n')}\n`;
 };
 
 const createBeforeChildrenScript = (node: WriteTextNode): string => {
@@ -212,17 +238,17 @@ const createBeforeChildrenScript = (node: WriteTextNode): string => {
         `global ${WMN_PLANE}=pose_trans(get_pose(${selectedFrameIdLiteral}),p[${WMN_X_OFFSET_TEXT},${WMN_Y_OFFSET_TEXT},0,0,0,0])`,
         `global ${WMN_PLANE_ORIGINAL}=${WMN_PLANE}`,
         '# Text source and character iteration',
-        `Text=${textExpression}`,
-        'stringCounter=0',
-        'textLaenge=str_len(Text)',
-        'while (stringCounter<textLaenge):',
-        '  Char=str_at(Text, stringCounter)',
-        '  if(Char!=" "):',
-        '    writeMyCharacter(Char)',
+        `wmn_text=${textExpression}`,
+        'wmn_index=0',
+        'wmn_text_length=str_len(wmn_text)',
+        'while (wmn_index<wmn_text_length):',
+        '  wmn_char=str_at(wmn_text, wmn_index)',
+        '  if(wmn_char!=" "):',
+        '    writeMyCharacter(wmn_char)',
         '  else:',
         `    ${WMN_PLANE}=pose_trans(${WMN_PLANE},p[${WMN_SPACE},0,0,0,0,0])`,
         '  end',
-        '  stringCounter=stringCounter+1',
+        '  wmn_index=wmn_index+1',
         'end',
         `${WMN_PLANE}=${WMN_PLANE_ORIGINAL}`,
         '# End of Write Text Runtime',
@@ -265,7 +291,7 @@ const generateScriptCodeAfter = (node: WriteTextNode): OptionalPromise<ScriptBui
 // generateCodePreamble is optional
 const generatePreambleScriptCode = (node: WriteTextNode): OptionalPromise<ScriptBuilder> => {
     const scriptBuilder = new ScriptBuilder();
-    scriptBuilder.addRaw(createPreambleScript());
+    scriptBuilder.addRaw(createPreambleScript(node));
     return scriptBuilder;
 };
 
