@@ -44,6 +44,14 @@ const createProgramNode = (): OptionalPromise<WriteTextNode> => ({
         fixedText: '',
         selectedVariable: '',
         selectedFrame: '',
+        speed: 0.2,
+        acceleration: 0.2,
+        penUp: 0.01,
+        penDown: -0.005,
+        spaceBetweenLetters: 0.005,
+        spaceWidth: 0.025,
+        xOffset: 0.01,
+        yOffset: 0.02,
     },
 });
 

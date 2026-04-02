@@ -22,7 +22,32 @@
       "variable": "Variable",
       "select_variable": "- Select variable -",
       "frame": "Frame",
-      "select_frame": "- Select frame -"
+      "select_frame": "- Select frame -",
+      "settings": {
+        "dialog_title": "Write Text settings",
+        "confirm_text": "Save",
+        "dialog_description": "Configure writing behavior and layout for text rendering in the selected frame.",
+        "tab_movement": "Movement",
+        "tab_pen": "Pen",
+        "tab_spacing": "Spacing",
+        "tab_offsets": "Offsets",
+        "desc_movement": "Set the movement parameters that control writing speed and acceleration during letter strokes.",
+        "desc_pen": "Define the pen retraction height between strokes and the writing depth used to press into the surface.",
+        "desc_spacing": "Set the distances used for spacing between letters and for space characters in the written text.",
+        "desc_offsets": "Set the X and Y offset from the frame origin where text writing should begin.",
+        "section_motion": "Motion",
+        "section_pen": "Pen",
+        "section_font": "Font",
+        "section_position": "Position",
+        "speed": "Speed",
+        "acceleration": "Acceleration",
+        "pen_up": "Pen up height",
+        "pen_down": "Pen down depth",
+        "space_between_letters": "Letter spacing",
+        "space_width": "Space width",
+        "x_offset": "X offset",
+        "y_offset": "Y offset"
+      }
     }
   }
 }

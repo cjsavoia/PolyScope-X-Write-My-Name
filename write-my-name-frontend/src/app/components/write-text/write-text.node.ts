@@ -7,6 +7,14 @@ export interface WriteTextParameters {
     fixedText: string;
     selectedVariable: string;
     selectedFrame: string;
+    speed: number;
+    acceleration: number;
+    penUp: number;
+    penDown: number;
+    spaceBetweenLetters: number;
+    spaceWidth: number;
+    xOffset: number;
+    yOffset: number;
 }
 
 export interface WriteTextNode extends ProgramNode {

@@ -119,16 +119,27 @@ export class WriteTextComponent implements OnChanges, ProgramPresenter {
             },
             {
                 icon: 'pencil',
-                title: 'Write Text settings',
+                title: this.translateService.instant('presenter.write-text.settings.dialog_title'),
                 dialogSize: 'DEFAULT',
-                confirmText: 'Save',
+                confirmText: this.translateService.instant('presenter.write-text.settings.confirm_text'),
                 raiseForKeyboard: false,
             },
         );
 
-        if (dialogData.reason !== CloseReason.CONFIRMED) {
+        if (dialogData.reason !== CloseReason.CONFIRMED || !dialogData.returnData) {
             return;
         }
+
+        const result = dialogData.returnData;
+        this.contributedNode.parameters.speed = result.speed;
+        this.contributedNode.parameters.acceleration = result.acceleration;
+        this.contributedNode.parameters.penUp = result.penUp;
+        this.contributedNode.parameters.penDown = result.penDown;
+        this.contributedNode.parameters.spaceBetweenLetters = result.spaceBetweenLetters;
+        this.contributedNode.parameters.spaceWidth = result.spaceWidth;
+        this.contributedNode.parameters.xOffset = result.xOffset;
+        this.contributedNode.parameters.yOffset = result.yOffset;
+        await this.saveNode();
     }
 
     private async loadDropdownOptions(): Promise<void> {

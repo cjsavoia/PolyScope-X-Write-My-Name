@@ -1,3 +1,40 @@
-.write-text-settings-dialog-content {
-  min-height: 120px;
+.more-settings-dialog-content {
+    display: flex;
+    width: 100%;
+    margin: var(--spacing-05) 0;
+    min-height: 340px;
+    gap: var(--spacing-05);
+
+    nav {
+        width: 220px;
+        max-height: 100%;
+
+        ur-tab + ur-tab {
+            margin-top: var(--spacing-04);
+        }
+    }
+
+    hr.vertical {
+        height: auto;
+    }
+
+    .tab-content {
+        display: flex;
+        flex-direction: column;
+        row-gap: var(--spacing-05);
+        width: 100%;
+    }
+
+    .content-pane {
+        display: flex;
+        flex-direction: column;
+        row-gap: var(--spacing-03);
+        padding: var(--spacing-02);
+        width: 100%;
+    }
+
+    ur-dialog-input {
+        display: block;
+        width: 150px;
+    }
 }

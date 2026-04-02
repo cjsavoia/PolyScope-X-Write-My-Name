@@ -1,5 +1,150 @@
 @if (inputData) {
-<div class="write-text-settings-dialog-content">
-    <p>Write Text settings dialog scaffold.</p>
+<div class="more-settings-dialog-content">
+    <nav>
+        <ur-tabs (linkChanged)="onLinkChanged($event)" [isVertical]="true">
+            <ur-tab
+                [title]="('presenter.write-text.settings.tab_movement' | translate) + ':'"
+                [subtitle]="motionSummary()"
+                icon="move-speed"
+                link="movement"
+                [attr.data-testid]="'write-text-movement-tab'"
+            ></ur-tab>
+            <ur-tab
+                [title]="('presenter.write-text.settings.tab_pen' | translate) + ':'"
+                [subtitle]="penSummary()"
+                icon="move-transform"
+                link="pen"
+                [attr.data-testid]="'write-text-pen-tab'"
+            ></ur-tab>
+            <ur-tab
+                [title]="('presenter.write-text.settings.tab_spacing' | translate) + ':'"
+                [subtitle]="fontSummary()"
+                icon="move-blend"
+                link="spacing"
+                [attr.data-testid]="'write-text-spacing-tab'"
+            ></ur-tab>
+            <ur-tab
+                [title]="('presenter.write-text.settings.tab_offsets' | translate) + ':'"
+                [subtitle]="positionSummary()"
+                icon="move-frame"
+                link="offsets"
+                [attr.data-testid]="'write-text-offsets-tab'"
+            ></ur-tab>
+        </ur-tabs>
+    </nav>
+
+    <hr class="vertical" />
+
+    <div class="content-pane">
+        @switch (activeTab) {
+            @case ('movement') {
+                <div class="tab-content">
+                    <ur-heading>{{ 'presenter.write-text.settings.tab_movement' | translate }}</ur-heading>
+                    <section class="ur-rich-text">
+                        <p>{{ 'presenter.write-text.settings.desc_movement' | translate }}</p>
+                    </section>
+                    <ur-dialog-input
+                        [label]="'presenter.write-text.settings.speed' | translate"
+                        type="number"
+                        [value]="speed.toString()"
+                        [unit]="'m/s'"
+                        [validation]="{ min: 0.001, max: 2 }"
+                        (valueChanged)="setSpeed($event)"
+                        data-testid="settings-speed"
+                    ></ur-dialog-input>
+                    <ur-dialog-input
+                        [label]="'presenter.write-text.settings.acceleration' | translate"
+                        type="number"
+                        [value]="acceleration.toString()"
+                        [unit]="'m/s^2'"
+                        [validation]="{ min: 0.001, max: 10 }"
+                        (valueChanged)="setAcceleration($event)"
+                        data-testid="settings-acceleration"
+                    ></ur-dialog-input>
+                </div>
+            }
+
+            @case ('pen') {
+                <div class="tab-content">
+                    <ur-heading>{{ 'presenter.write-text.settings.tab_pen' | translate }}</ur-heading>
+                    <section class="ur-rich-text">
+                        <p>{{ 'presenter.write-text.settings.desc_pen' | translate }}</p>
+                    </section>
+                    <ur-dialog-input
+                        [label]="'presenter.write-text.settings.pen_up' | translate"
+                        type="number"
+                        [value]="penUp.toString()"
+                        [unit]="'m'"
+                        [validation]="{ min: 0.001, max: 0.1 }"
+                        (valueChanged)="setPenUp($event)"
+                        data-testid="settings-pen-up"
+                    ></ur-dialog-input>
+                    <ur-dialog-input
+                        [label]="'presenter.write-text.settings.pen_down' | translate"
+                        type="number"
+                        [value]="penDown.toString()"
+                        [unit]="'m'"
+                        [validation]="{ min: -0.05, max: 0.05 }"
+                        (valueChanged)="setPenDown($event)"
+                        data-testid="settings-pen-down"
+                    ></ur-dialog-input>
+                </div>
+            }
+
+            @case ('spacing') {
+                <div class="tab-content">
+                    <ur-heading>{{ 'presenter.write-text.settings.tab_spacing' | translate }}</ur-heading>
+                    <section class="ur-rich-text">
+                        <p>{{ 'presenter.write-text.settings.desc_spacing' | translate }}</p>
+                    </section>
+                    <ur-dialog-input
+                        [label]="'presenter.write-text.settings.space_between_letters' | translate"
+                        type="number"
+                        [value]="spaceBetweenLetters.toString()"
+                        [unit]="'m'"
+                        [validation]="{ min: 0, max: 0.1 }"
+                        (valueChanged)="setSpaceBetweenLetters($event)"
+                        data-testid="settings-space-between-letters"
+                    ></ur-dialog-input>
+                    <ur-dialog-input
+                        [label]="'presenter.write-text.settings.space_width' | translate"
+                        type="number"
+                        [value]="spaceWidth.toString()"
+                        [unit]="'m'"
+                        [validation]="{ min: 0.001, max: 0.2 }"
+                        (valueChanged)="setSpaceWidth($event)"
+                        data-testid="settings-space-width"
+                    ></ur-dialog-input>
+                </div>
+            }
+
+            @case ('offsets') {
+                <div class="tab-content">
+                    <ur-heading>{{ 'presenter.write-text.settings.tab_offsets' | translate }}</ur-heading>
+                    <section class="ur-rich-text">
+                        <p>{{ 'presenter.write-text.settings.desc_offsets' | translate }}</p>
+                    </section>
+                    <ur-dialog-input
+                        [label]="'presenter.write-text.settings.x_offset' | translate"
+                        type="number"
+                        [value]="xOffset.toString()"
+                        [unit]="'m'"
+                        [validation]="{ min: -1, max: 1 }"
+                        (valueChanged)="setXOffset($event)"
+                        data-testid="settings-x-offset"
+                    ></ur-dialog-input>
+                    <ur-dialog-input
+                        [label]="'presenter.write-text.settings.y_offset' | translate"
+                        type="number"
+                        [value]="yOffset.toString()"
+                        [unit]="'m'"
+                        [validation]="{ min: -1, max: 1 }"
+                        (valueChanged)="setYOffset($event)"
+                        data-testid="settings-y-offset"
+                    ></ur-dialog-input>
+                </div>
+            }
+        }
+    </div>
 </div>
 }
